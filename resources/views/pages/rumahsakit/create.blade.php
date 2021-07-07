@@ -1,0 +1,55 @@
+@extends('layouts.default')
+
+@section('title')
+    Tambah Kategori
+@endsection
+
+@section('content')
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Tambah Rumah Sakit</h6>
+        </div>
+        <div class="card-body">
+            <form action="/rumahsakit/insert" method="post" enctype="multipart/form-data">
+                @csrf
+                <div class="form-group col-md">
+                    <label for="">Nama Rumah Sakit</label>
+                    <input type="text" name="name" class="form-control" placeholder="Nama Rumah Sakit..." required>
+                </div>
+                <div class="form-group col-md">
+                    <label for="">Lokasi</label>
+                    <input type="text" name="location" class="form-control" placeholder="Lokasi..." required>
+                </div>
+
+                <div class="form-group col-md">
+                    <label for="">No. Telp</label>
+                    <input type="text" name="telp" class="form-control" placeholder="Telp..." required>
+                </div>
+                <div class="form-group col-md"><label for="">Gambar</label>
+                    @error('image')
+                    <div class="text-muted"></div>
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            @foreach ($errors->all() as $error)
+                                {{ $error }}
+                            @endforeach
+                        </div>
+                    @endif
+                    @enderror
+                    <input
+                        type="file"
+                        name="image"
+                        value=""
+                        id="formFile"
+                        required
+                        accept="image/*"
+                        class="form-control @error('image') is-invalid @enderror">
+                </div>
+                <div class="form-group col-md">
+                    <button type="submit" class="btn btn-primary btn-block">Tambah</button>
+                </div>
+            </form>
+        </div>
+    </div>
+@endsection
