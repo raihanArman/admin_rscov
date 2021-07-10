@@ -8,6 +8,8 @@
 
     if($_SERVER['REQUEST_METHOD'] == 'GET'){
         $locationUser = $_GET['location_user'];
+        $latUser = $_GET['lat_user'];
+        $longUser = $_GET['long_user'];
 
         $queryTempAlamat = "TRUNCATE TABLE tb_temp_alamat";
         mysqli_query($con, $queryTempAlamat);
@@ -29,14 +31,7 @@
 
                 //Insert Temp Alamat
                 while($row = mysqli_fetch_array($sql)){
-                    $addressAsal = str_replace(" ", "+", $locationUser);
                     $addressTujuan = str_replace(" ", "+", $row['lokasi']);
-
-                    $jsonAsal = file_get_contents("https://maps.google.com/maps/api/geocode/json?address=".$addressAsal."&sensor=false&key=AIzaSyBtnPVw4o2H1ZvDtRT8l8OTKCzS60eV0as");
-                    $jsonAsal = json_decode($jsonAsal);
-
-                    $latAsal = $jsonAsal->{'results'}[0]->{'geometry'}->{'location'}->{'lat'};
-                    $longAsal = $jsonAsal->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
 
                     $jsonTujuan = file_get_contents("https://maps.google.com/maps/api/geocode/json?address=".$addressTujuan."&sensor=false&key=AIzaSyBtnPVw4o2H1ZvDtRT8l8OTKCzS60eV0as");
                     $jsonTujuan = json_decode($jsonTujuan);
@@ -44,7 +39,7 @@
                     $latTujuan = $jsonTujuan->{'results'}[0]->{'geometry'}->{'location'}->{'lat'};
                     $longTujuan = $jsonTujuan->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
 
-                    $urlApi = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$latAsal.","."$longAsal"."&destinations=".$latTujuan.","."$longTujuan"."&key=AIzaSyBtnPVw4o2H1ZvDtRT8l8OTKCzS60eV0as";
+                    $urlApi = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$latUser.","."$longUser"."&destinations=".$latTujuan.","."$longTujuan"."&key=AIzaSyBtnPVw4o2H1ZvDtRT8l8OTKCzS60eV0as";
         
                     $result = file_get_contents($urlApi);
     
